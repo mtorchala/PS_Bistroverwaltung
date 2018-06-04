@@ -35,16 +35,58 @@ import javafx.stage.Stage;
 public class BasisControl implements Initializable{
 	private BasisModel basisModel;
 	
+	@FXML
+	private Button bttnAdd;
 	
-	public BasisControl() throws Exception{
+	@FXML
+	private TableView<Gericht> tvGerichte;
+	
+	@FXML
+	private TableView tvBestellung;
+	
+	public BasisControl(){
 		
 		basisModel = new BasisModel();
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+		gerichteEinlesen();
+	}
+	
+	
+	
+	
+	@FXML
+	private void gerichtZurBestellungHinzufügen(){
+		tvGerichte.setDisable(true);
+	}
+	
+	
+	
+	private void gerichteEinlesen(){
+		tvGerichte.getColumns().clear();
 		
+		ObservableList<Gericht> ausgeleseneGerichte = null;
+		try {
+			ausgeleseneGerichte = basisModel.selectAlleGerichte();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		TableColumn<Gericht, String> colName = new TableColumn<Gericht, String>("Name");
+		colName.setMinWidth(175);
+		colName.setCellValueFactory(new PropertyValueFactory<Gericht, String>("name"));
+        
+		TableColumn<Gericht, Double> colPreis = new TableColumn<Gericht, Double>("Preis");
+		colPreis.setMinWidth(75);        
+		colPreis.setCellValueFactory(new PropertyValueFactory<Gericht, Double>("preis"));
+        
+        
+        tvGerichte.getColumns().addAll(colName,colPreis);
+       
+        tvGerichte.setItems(ausgeleseneGerichte);
 	}
 	
 }

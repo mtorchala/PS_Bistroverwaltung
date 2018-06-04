@@ -1,10 +1,10 @@
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.LinkedList;
 
 import javafx.collections.FXCollections;
@@ -60,15 +60,28 @@ public class DatenbankAnbindung {
         pstmt.setDouble(2, preis);
         pstmt.setDouble(3, kategorieid);
         pstmt.executeUpdate();
+        conn.close();
 	}
 	
-	public void insertIntoBestellung(Date datum) throws SQLException{
+	public int insertIntoBestellung(Date datum) throws SQLException{
 		String sql = "INSERT INTO bestellung(datum) VALUES(?)";
 		 
         Connection conn = connect();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setDate(1,datum);
+        PreparedStatement pstmt = conn.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
+        pstmt.setString(1,datum.toString());
         pstmt.executeUpdate();
+        
+        ResultSet rs = pstmt.getGeneratedKeys();
+
+        int key = -1;
+        if (rs.next()) {
+           key = rs.getInt(1);
+           pstmt.close();
+           rs.close();
+        }
+        conn.close();
+       
+		return key;
    
 	}
 	
@@ -80,6 +93,7 @@ public class DatenbankAnbindung {
         pstmt.setInt(1, kategorieid);
         pstmt.setString(2, name);
         pstmt.executeUpdate();
+        conn.close();
    
 	}
 	
@@ -92,6 +106,7 @@ public class DatenbankAnbindung {
         pstmt.setInt(2, gerichtid);
         pstmt.setInt(3, anzahl);
         pstmt.executeUpdate();
+        conn.close();
    
 	}
 	
@@ -108,7 +123,7 @@ public class DatenbankAnbindung {
 	                       rs.getDouble("gericht_id") + "\t" +
 	                       rs.getInt("anzahl"));
 	    }
-       
+	    conn.close();
     }
 	
 	public void selectAlleKategorien() throws SQLException{
@@ -120,8 +135,9 @@ public class DatenbankAnbindung {
             
 	    while (rs.next()) {
 	    	System.out.println(rs.getString("name"));
+	    	
 	    }
-       
+	    conn.close();
     }
 	
 	public ObservableList<Gericht> selectAlleGerichte() throws SQLException{
@@ -139,8 +155,22 @@ public class DatenbankAnbindung {
 	                       rs.getDouble("preis"),
 	                       rs.getInt("kategorie_id")));
 	    }
-       
+	    conn.close();
 	    return gerichtListe;
+    }
+	
+	public int selectGerichtID(Gericht gericht) throws SQLException{
+	       
+	
+		String sql = "SELECT gericht_id FROM gericht WHERE name LIKE '"+gericht.getName()+"'";
+		Connection conn = connect();
+        Statement stmt  = conn.createStatement();
+        ResultSet rs    = stmt.executeQuery(sql);
+        rs.next();
+        int id = rs.getInt(1);
+        stmt.close();
+        conn.close();
+	    return id;
     }
 	
 	public void selectAlleBestellungen() throws SQLException{
@@ -153,7 +183,7 @@ public class DatenbankAnbindung {
 	    while (rs.next()) {
 	    	System.out.println(rs.getString("datum"));
 	    }
-       
+	    conn.close();
     }
 	
 	

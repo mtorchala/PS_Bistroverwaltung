@@ -21,11 +21,12 @@
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <Button fx:id="bttnAdd" layoutX="336.0" layoutY="253.0" mnemonicParsing="false" onAction="#gerichtZurBestellungHinzufügen" prefHeight="27.0" prefWidth="227.0" text="Gericht zur Bestellung hinzufügen" />
-      <Button layoutX="588.0" layoutY="252.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="336.0" layoutY="334.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="588.0" layoutY="332.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="bttnAdd" layoutX="403.0" layoutY="251.0" mnemonicParsing="false" onAction="#gerichtZurBestellungHinzufügen" prefHeight="27.0" prefWidth="227.0" text="Gericht zur Bestellung hinzufügen" />
+      <Button layoutX="401.0" layoutY="369.0" mnemonicParsing="false" onAction="#bestellungSpeichern" prefHeight="27.0" prefWidth="230.0" text="Bestellung speichern" />
+      <Button layoutX="402.0" layoutY="289.0" mnemonicParsing="false" onAction="#gerichtAusBestellungEntfernen" prefHeight="27.0" prefWidth="229.0" text="Gericht aus Bestellung entfernen" />
+      <Button fx:id="bttnBestellungVerwerfen" layoutX="402.0" layoutY="328.0" mnemonicParsing="false" onAction="#bestellungVerwerfen" prefHeight="27.0" prefWidth="229.0" text="Bestellung verwerfen" />
       <Label layoutX="29.0" layoutY="24.0" text="Gerichte:" />
       <Label layoutX="341.0" layoutY="23.0" text="Bestellung:" />
+      <Label fx:id="lblRechnung" layoutX="338.0" layoutY="433.0" text="Kosten:" />
    </children>
 </Pane>

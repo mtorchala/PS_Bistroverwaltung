@@ -1,14 +1,22 @@
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class BasisModel {
+	
+	public BasisModel(){
+		
+		// Initate DB with demo values
+		createAllTables();
+		try {
+			insertIntoKategorie("Hauptgericht", 1);
+			insertIntoGericht("Baguett", 1.50, 1);
+			
+		} catch (SQLException e) {
+			System.out.println("DB already exists.");
+			//e.printStackTrace();
+		}
+	}
 
 	public void createAllTables() {
 		

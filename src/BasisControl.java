@@ -1,5 +1,6 @@
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -11,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -34,10 +36,13 @@ public class BasisControl implements Initializable{
 	
 	private Bestellung bestellung;
 	
+	DecimalFormat df = new DecimalFormat("###,##0.00");
+	
 	public BasisControl(){
 		
 		basisModel = new BasisModel();
 		bestellung = new Bestellung(new Date());
+		
 	}
 
 	@Override
@@ -65,7 +70,7 @@ public class BasisControl implements Initializable{
 			bestellung.fügeGerichtHinzu(gericht);
 			tvBestellung.setItems(bestellung.getBestelltegerichte());
 			tvBestellung.refresh();
-			lblRechnung.setText("Kosten: " + bestellung.berechnePreis()+ " €");
+			lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
 		}
 		
 		
@@ -91,6 +96,39 @@ public class BasisControl implements Initializable{
 		TableColumn<Gericht, Double> colPreis = new TableColumn<Gericht, Double>("Preis");
 		colPreis.setMinWidth(75);        
 		colPreis.setCellValueFactory(new PropertyValueFactory<Gericht, Double>("preis"));
+		
+		colPreis.setCellFactory(new Callback<TableColumn, TableCell>() {
+            public TableCell call(TableColumn p) {
+                TableCell cell = new TableCell<Gericht, Double>() {
+                    @Override
+                    public void updateItem(Double item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setText(empty ? null : getString());
+                        setGraphic(null);
+                    }
+
+                    private String getString() {
+                        String ret = "";
+                        if (getItem() != null) {
+                            String gi = getItem().toString();
+                            NumberFormat df = DecimalFormat.getInstance();
+                            df.setMinimumFractionDigits(2);
+                            df.setRoundingMode(RoundingMode.DOWN);
+
+                            ret = df.format(Double.parseDouble(gi));
+                        } else {
+                            ret = "0.00";
+                        }
+                        return ret;
+                    }
+                };
+
+                cell.setStyle("-fx-alignment: top-right;");
+                return cell;
+            }
+        });
+//Formatting decimal columns end
+	
         
         
         tvGerichte.getColumns().addAll(colName,colPreis);
@@ -141,7 +179,7 @@ public class BasisControl implements Initializable{
 		tvBestellung.getColumns().clear();
 		BestellungenAufbereiten();
 		tvBestellung.refresh();
-		lblRechnung.setText("Kosten: " + bestellung.berechnePreis()+ " €");
+		lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
 	}
 	
 	@FXML
@@ -151,7 +189,7 @@ public class BasisControl implements Initializable{
 			bestellung.entferneGericht(index);
 			tvBestellung.setItems(bestellung.getBestelltegerichte());
 			tvBestellung.refresh();
-			lblRechnung.setText("Kosten: " + bestellung.berechnePreis()+ " €");
+			lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
 		}
 	}
 	

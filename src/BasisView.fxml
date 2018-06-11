@@ -10,7 +10,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BasisControl">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programm.BasisControl">
   <tabs>
     <Tab text="Bestellungen">
          <content>
@@ -37,7 +37,7 @@
      			  <Label fx:id="lblRechnung" layoutX="394.0" layoutY="380.0" style="-fx-background-color: grey;" text="Kosten: 0,00 €" />
                   <Label layoutX="394.0" layoutY="260.0" text="Gericht:" />
                   <Label layoutX="394.0" layoutY="320.0" text="Bestellung:" />
-                  <ComboBox fx:id="cboBestellung" layoutX="418.0" layoutY="18.0" prefWidth="150.0" />
+                  <ComboBox fx:id="cbxBestellung" layoutX="418.0" layoutY="18.0" onAction="#bestellungLaden" prefWidth="150.0" />
              </children>
           </Pane>
        </content>

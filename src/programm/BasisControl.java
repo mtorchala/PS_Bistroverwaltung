@@ -1,6 +1,9 @@
+package programm;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -12,6 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -37,7 +42,7 @@ public class BasisControl implements Initializable{
 	private TableView tvBestellung;
 	
 	@FXML
-	private ComboBox<Bestellung> cbxBestellung = new ComboBox<Bestellung>();
+	private ComboBox<Bestellung> cbxBestellung;
 	
 	@FXML
 	private Label lblRechnung;
@@ -50,6 +55,7 @@ public class BasisControl implements Initializable{
 	private Bestellung bestellung;
 	
 	DecimalFormat df = new DecimalFormat("###,##0.00");
+	ObservableList<Bestellung> bestellungen;
 	
 	public BasisControl(){
 		
@@ -216,7 +222,7 @@ public class BasisControl implements Initializable{
 	}
 	
 	private void bestellungEinlesen() {
-		ObservableList<Bestellung> bestellungen = null;
+		bestellungen = null;
 		
 		try {
 			bestellungen = basisModel.selectAlleBestellungen();
@@ -226,6 +232,7 @@ public class BasisControl implements Initializable{
 		}
 		
 		if(bestellungen != null) {
+			
 			cbxBestellung.setItems(bestellungen);
 			cbxBestellung.getSelectionModel().select(1);
 		}
@@ -263,6 +270,21 @@ public class BasisControl implements Initializable{
         
         tvBestellung.getColumns().addAll(colName,colPreis,colAnzahl);
         tvBestellung.setItems(bestellung.getBestelltegerichte());
+        
+        Callback<ListView<Bestellung>, ListCell<Bestellung>> factory = lv -> new ListCell<Bestellung>() {
+
+            @Override
+            protected void updateItem(Bestellung item, boolean empty) {
+                super.updateItem(item, empty);
+                DateFormat formatter = new SimpleDateFormat();
+                setText(empty ? "" : item.getBestellungId()+" | " + formatter.format(item.getDatum())+ " Uhr");
+            }
+
+        };
+
+        cbxBestellung.setCellFactory(factory);
+        cbxBestellung.setButtonCell(factory.call(null));
+        
 	}
 	
 	@FXML
@@ -293,6 +315,23 @@ public class BasisControl implements Initializable{
 				basisModel.bestellungSpeichern(bestellung);
 				bestellungEinlesen();
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	public void bestellungLaden(){
+		try {
+				
+			ObservableList<BestellungGericht> bestellungGericht = basisModel.bestellungLaden(bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex()).getBestellungId());
+			tvBestellung.setItems(bestellungGericht);
+			tvBestellung.refresh();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

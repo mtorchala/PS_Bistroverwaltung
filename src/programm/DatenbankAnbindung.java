@@ -1,3 +1,4 @@
+package programm;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -220,6 +221,35 @@ public class DatenbankAnbindung {
 	    return bestellungListe;
     }
 	
+public ObservableList<BestellungGericht> selectBestellungenGerichte(int bestellungid) throws SQLException{
+		
+		ObservableList<BestellungGericht> bestellunggerichtListe = FXCollections.observableArrayList();
+	       
+		String sql = "SELECT * FROM gericht_bestellung WHERE bestellung_id="+bestellungid;
+		Connection conn = connect();
+        Statement stmt  = conn.createStatement();
+        ResultSet rs    = stmt.executeQuery(sql);
+            
+	    while (rs.next()) {
+	    	bestellunggerichtListe.add(new BestellungGericht(getGerichtById(rs.getInt("gericht_id")),rs.getInt("anzahl")));
+	    }
+	    conn.close();
+	    return bestellunggerichtListe;
+    }
+	
+	private Gericht getGerichtById(int gerichtid) throws SQLException{
+		
+		String sql = "SELECT * FROM gericht WHERE gericht_id="+gerichtid;
+		Connection conn = connect();
+        Statement stmt  = conn.createStatement();
+        ResultSet rs    = stmt.executeQuery(sql);
+        Gericht g = null;
+	    if(rs.next()){
+	    	g = new Gericht(rs.getInt("gericht_id"),rs.getString("name"),rs.getDouble("preis"),rs.getInt("kategorie_id"));
+	    }
+	    conn.close();
+	    return g;
+	}
 	
 	
 	private Connection connect() {

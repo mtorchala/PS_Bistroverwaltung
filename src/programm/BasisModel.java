@@ -1,3 +1,4 @@
+package programm;
 import java.sql.SQLException;
 import java.util.Date;
 import javafx.collections.ObservableList;
@@ -91,6 +92,13 @@ public class BasisModel {
 				Thread.sleep(100);
 			}
 		}
+		
+	}
+	
+public ObservableList<BestellungGericht> bestellungLaden(int bestellungid) throws SQLException, InterruptedException {
+		
+		DatenbankAnbindung dba = new DatenbankAnbindung();
+		return dba.selectBestellungenGerichte(bestellungid);
 		
 	}
 	

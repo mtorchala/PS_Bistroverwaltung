@@ -12,12 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import javafx.scene.control.TextField;
 
 public class BasisControl implements Initializable{
 	private BasisModel basisModel;
@@ -29,10 +29,18 @@ public class BasisControl implements Initializable{
 	private TableView<Gericht> tvGerichte;
 	
 	@FXML
+	private TableView<Gericht> tvGerichteEdit;
+	
+	@FXML
 	private TableView tvBestellung;
 	
 	@FXML
 	private Label lblRechnung;
+	
+	@FXML
+	private TextField txtEditName;
+	@FXML
+	private TextField  txtEditPreis;
 	
 	private Bestellung bestellung;
 	
@@ -51,6 +59,86 @@ public class BasisControl implements Initializable{
 		gerichteEinlesen();
 	}
 	
+	 @FXML
+	 private void handleAction() {
+		 
+		 Gericht gericht = (Gericht) tvGerichteEdit.getSelectionModel().getSelectedItem();
+			
+			if(gericht != null){
+				txtEditName.setText(gericht.getName());
+				txtEditPreis.setText(df.format(gericht.getPreis()));
+			}
+	    }
+	 
+	 @FXML
+	 private void updateGericht() {
+		 Gericht gericht = (Gericht) tvGerichteEdit.getSelectionModel().getSelectedItem();
+		 
+		 if(gericht != null) {
+		 
+			 if(!txtEditName.getText().isEmpty() && !txtEditPreis.getText().isEmpty()) {
+				 try {
+					basisModel.updateGericht(gericht.getGerichtId(), txtEditName.getText(), Double.parseDouble(txtEditPreis.getText().replaceAll(",", ".")), gericht.getKategorieid());
+				} catch (NumberFormatException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				txtEditName.clear();
+				txtEditPreis.clear();
+				gerichteEinlesen();
+				
+				//ToDo Preis on the fly berechen
+				tvBestellung.refresh();
+				lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
+			 }else {
+				 Alert alert = new Alert(Alert.AlertType.ERROR);
+				    alert.setTitle("Fehler");
+				    alert.setHeaderText("Leerer Name oder Preis");
+				    alert.setContentText("Der Name und der Preis darf nicht leer sein.");
+				    alert.showAndWait();			 
+			 }
+		 }
+	 }
+	 
+	 @FXML
+	 private void insertGericht() {
+		 if(!txtEditName.getText().isEmpty() && !txtEditPreis.getText().isEmpty()) {
+			 try {
+				 basisModel.insertIntoGericht(txtEditName.getText(), Double.parseDouble(txtEditPreis.getText().replaceAll(",", ".")), 1);
+			} catch (NumberFormatException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			txtEditName.clear();
+			txtEditPreis.clear();
+			gerichteEinlesen();
+		 } else {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+		    alert.setTitle("Fehler");
+		    alert.setHeaderText("Leerer Name oder Preis");
+		    alert.setContentText("Der Name und der Preis darf nicht leer sein.");
+		    alert.showAndWait();		 
+		 }
+	 }
+	 
+	 @FXML
+	 private void deleteGericht() {
+		 Gericht gericht = (Gericht) tvGerichteEdit.getSelectionModel().getSelectedItem();
+		 
+		 if(gericht != null) {
+			try {
+				basisModel.deleteGericht(gericht.getGerichtId());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			txtEditName.clear();
+			txtEditPreis.clear();
+			gerichteEinlesen();
+		 }
+		 
+		 
+	 }
 	
 	
 	
@@ -80,6 +168,7 @@ public class BasisControl implements Initializable{
 	
 	private void gerichteEinlesen(){
 		tvGerichte.getColumns().clear();
+		tvGerichteEdit.getColumns().clear();
 		
 		ObservableList<Gericht> ausgeleseneGerichte = null;
 		try {
@@ -89,53 +178,35 @@ public class BasisControl implements Initializable{
 			e.printStackTrace();
 		}
 		
+		ObservableList<Gericht> ausgeleseneGerichte2 = null;
+		try {
+			ausgeleseneGerichte2 = basisModel.selectAlleGerichte();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		TableColumn<Gericht, String> colName = new TableColumn<Gericht, String>("Name");
 		colName.setMinWidth(175);
 		colName.setCellValueFactory(new PropertyValueFactory<Gericht, String>("name"));
+		
+		TableColumn<Gericht, String> colName2 = new TableColumn<Gericht, String>("Name");
+		colName2.setMinWidth(175);
+		colName2.setCellValueFactory(new PropertyValueFactory<Gericht, String>("name"));
         
 		TableColumn<Gericht, Double> colPreis = new TableColumn<Gericht, Double>("Preis");
 		colPreis.setMinWidth(75);        
 		colPreis.setCellValueFactory(new PropertyValueFactory<Gericht, Double>("preis"));
 		
-		colPreis.setCellFactory(new Callback<TableColumn, TableCell>() {
-            public TableCell call(TableColumn p) {
-                TableCell cell = new TableCell<Gericht, Double>() {
-                    @Override
-                    public void updateItem(Double item, boolean empty) {
-                        super.updateItem(item, empty);
-                        setText(empty ? null : getString());
-                        setGraphic(null);
-                    }
-
-                    private String getString() {
-                        String ret = "";
-                        if (getItem() != null) {
-                            String gi = getItem().toString();
-                            NumberFormat df = DecimalFormat.getInstance();
-                            df.setMinimumFractionDigits(2);
-                            df.setRoundingMode(RoundingMode.DOWN);
-
-                            ret = df.format(Double.parseDouble(gi));
-                        } else {
-                            ret = "0.00";
-                        }
-                        return ret;
-                    }
-                };
-
-                cell.setStyle("-fx-alignment: top-right;");
-                return cell;
-            }
-        });
-//Formatting decimal columns end
-	
+		TableColumn<Gericht, Double> colPreis2 = new TableColumn<Gericht, Double>("Preis");
+		colPreis2.setMinWidth(75);        
+		colPreis2.setCellValueFactory(new PropertyValueFactory<Gericht, Double>("preis"));
+		
+        tvGerichte.getColumns().addAll(colName,colPreis); 
+        tvGerichteEdit.getColumns().addAll(colName2,colPreis2);
         
-        
-        tvGerichte.getColumns().addAll(colName,colPreis);
-        
-        
-       
         tvGerichte.setItems(ausgeleseneGerichte);
+        tvGerichteEdit.setItems(ausgeleseneGerichte2);
 	}
 	
 	private void BestellungenAufbereiten(){

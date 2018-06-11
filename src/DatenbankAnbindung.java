@@ -63,6 +63,29 @@ public class DatenbankAnbindung {
         conn.close();
 	}
 	
+	public void updateGericht(int gerichtId, String name, double preis, int kategorieid) throws SQLException{
+		String sql = "UPDATE gericht SET name = ?, preis = ?, kategorie_id = ? WHERE gericht_id = ?";
+		 
+        Connection conn = connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, name);
+        pstmt.setDouble(2, preis);
+        pstmt.setDouble(3, kategorieid);
+        pstmt.setDouble(4, gerichtId);
+        pstmt.executeUpdate();
+        conn.close();
+	}
+	
+	public void deleteGericht(int gerichtId) throws SQLException{
+		String sql = "DELETE FROM gericht WHERE gericht_id = ?";
+		 
+        Connection conn = connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setDouble(1, gerichtId);
+        pstmt.executeUpdate();
+        conn.close();
+	}
+	
 	public int insertIntoBestellung(Date datum) throws SQLException{
 		String sql = "INSERT INTO bestellung(datum) VALUES(?)";
 		 
@@ -151,7 +174,8 @@ public class DatenbankAnbindung {
             
 	    while (rs.next()) {
 	    	
-	    	gerichtListe.add(new Gericht(rs.getString("name"),
+	    	gerichtListe.add(new Gericht(rs.getInt("gericht_id"),
+	    				rs.getString("name"),
 	                       rs.getDouble("preis"),
 	                       rs.getInt("kategorie_id")));
 	    }

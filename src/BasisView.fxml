@@ -2,31 +2,65 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BasisControl">
-   <children>
-      <TableView id="tvGerichte" fx:id="tvGerichte" layoutX="24.0" layoutY="48.0" prefHeight="438.0" prefWidth="253.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TableView>
-      <TableView id="tvBestellungen" fx:id="tvBestellung" layoutX="331.0" layoutY="50.0" prefHeight="184.0" prefWidth="360.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TableView>
-      <Button fx:id="bttnAdd" layoutX="403.0" layoutY="251.0" mnemonicParsing="false" onAction="#gerichtZurBestellungHinzufügen" prefHeight="27.0" prefWidth="227.0" text="Gericht zur Bestellung hinzufügen" />
-      <Button layoutX="401.0" layoutY="369.0" mnemonicParsing="false" onAction="#bestellungSpeichern" prefHeight="27.0" prefWidth="230.0" text="Bestellung speichern" />
-      <Button layoutX="402.0" layoutY="289.0" mnemonicParsing="false" onAction="#gerichtAusBestellungEntfernen" prefHeight="27.0" prefWidth="229.0" text="Gericht aus Bestellung entfernen" />
-      <Button fx:id="bttnBestellungVerwerfen" layoutX="402.0" layoutY="328.0" mnemonicParsing="false" onAction="#bestellungVerwerfen" prefHeight="27.0" prefWidth="229.0" text="Bestellung verwerfen" />
-      <Label layoutX="29.0" layoutY="24.0" text="Gerichte:" />
-      <Label layoutX="341.0" layoutY="23.0" text="Bestellung:" />
-      <Label fx:id="lblRechnung" layoutX="338.0" layoutY="433.0" text="Kosten: 0,00 €" />
-   </children>
-</Pane>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BasisControl">
+  <tabs>
+    <Tab text="Bestellungen">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView id="tvGerichte" fx:id="tvGerichte" layoutX="24.0" layoutY="48.0" prefHeight="400.0" prefWidth="253.0">
+                  <columns>
+                    <TableColumn prefWidth="75.0" text="C1" />
+                    <TableColumn prefWidth="75.0" text="C2" />
+                  </columns>
+                </TableView>
+                <TableView id="tvBestellungen" fx:id="tvBestellung" layoutX="331.0" layoutY="50.0" prefHeight="184.0" prefWidth="360.0">
+                  <columns>
+                    <TableColumn prefWidth="75.0" text="C1" />
+                    <TableColumn prefWidth="75.0" text="C2" />
+                  </columns>
+                </TableView>
+                  <Button fx:id="bttnAdd" layoutX="471.0" layoutY="257.0" mnemonicParsing="false" onAction="#gerichtZurBestellungHinzufügen" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: green;" text="+" />
+                  <Button layoutX="471.0" layoutY="315.0" mnemonicParsing="false" onAction="#bestellungSpeichern" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: green;" text="speichern" />
+                  <Button layoutX="565.0" layoutY="257.0" mnemonicParsing="false" onAction="#gerichtAusBestellungEntfernen" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: red;" text="-" />
+                  <Button fx:id="bttnBestellungVerwerfen" layoutX="565.0" layoutY="315.0" mnemonicParsing="false" onAction="#bestellungVerwerfen" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: red;" text="löschen" />
+                  <Label layoutX="29.0" layoutY="24.0" text="Gerichte:" />
+      			  <Label layoutX="341.0" layoutY="23.0" text="Bestellung:" />
+     			  <Label fx:id="lblRechnung" layoutX="394.0" layoutY="380.0" style="-fx-background-color: grey;" text="Kosten: 0,00 €" />
+                  <Label layoutX="394.0" layoutY="260.0" text="Gericht:" />
+                  <Label layoutX="394.0" layoutY="320.0" text="Bestellung:" />
+             </children>
+          </Pane>
+       </content>
+	  </Tab>
+    <Tab text="Gerichte verwalten">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView id="tvGerichte" fx:id="tvGerichteEdit" layoutX="24.0" layoutY="48.0" onMouseClicked="#handleAction" prefHeight="400.0" prefWidth="253.0">
+                  <columns>
+                    <TableColumn prefWidth="75.0" text="C1" />
+                    <TableColumn prefWidth="75.0" text="C2" />
+                  </columns>
+                </TableView>
+                  <Label layoutX="29.0" layoutY="24.0" text="Gerichte:" />
+                  <TextField fx:id="txtEditName" layoutX="489.0" layoutY="79.0" />
+                  <TextField fx:id="txtEditPreis" layoutX="489.0" layoutY="132.0" />
+                  <Label layoutX="410.0" layoutY="84.0" text="Name:" />
+                  <Label layoutX="413.0" layoutY="137.0" text="Preis:" />
+                  <Button layoutX="334.0" layoutY="196.0" mnemonicParsing="false" onAction="#updateGericht" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: green;" text="speichern" />
+                  <Button layoutX="454.0" layoutY="196.0" mnemonicParsing="false" onAction="#insertGericht" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: yellow;" text="neu" />
+                  <Button layoutX="574.0" layoutY="196.0" mnemonicParsing="false" onAction="#deleteGericht" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: red;" text="löschen" />
+               </children>
+            </Pane>
+         </content>
+    </Tab>
+  </tabs>
+</TabPane>

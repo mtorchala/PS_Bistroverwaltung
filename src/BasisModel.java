@@ -31,6 +31,18 @@ public class BasisModel {
 		
 	}
 	
+	public void updateGericht(int gerichtId, String name, double preis, int kategorieid) throws SQLException {
+		DatenbankAnbindung dba = new DatenbankAnbindung();
+		dba.updateGericht(gerichtId, name, preis, kategorieid);
+		
+	}
+	
+	public void deleteGericht(int gerichtId) throws SQLException {
+		DatenbankAnbindung dba = new DatenbankAnbindung();
+		dba.deleteGericht(gerichtId);
+		
+	}
+	
 	public void insertIntoKategorie(String name,int kategorieid) throws SQLException {
 		DatenbankAnbindung dba = new DatenbankAnbindung();
 		dba.insertIntoKategorie(kategorieid,name);

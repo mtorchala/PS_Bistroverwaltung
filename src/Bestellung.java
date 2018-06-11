@@ -5,15 +5,29 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Bestellung {
+	private int bestellungId;
 	private Date datum;
 	private ObservableList<BestellungGericht> bestellteGerichte;
 
 	
+	public Bestellung(int bestellungId, Date datum) {
+		this.bestellungId = bestellungId;
+		this.datum = datum;
+		bestellteGerichte = FXCollections.observableArrayList();
+	}
+
 	public Bestellung(Date datum) {
 		this.datum = datum;
 		bestellteGerichte = FXCollections.observableArrayList();
 	}
 
+	public int getBestellungId() {
+		return bestellungId;
+	}
+	
+	public void setBestellungId(int bestellungId) {
+		this.bestellungId = bestellungId;
+	}
 	
 	public Date getDatum() {
 		return datum;

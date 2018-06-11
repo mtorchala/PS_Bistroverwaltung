@@ -18,6 +18,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ComboBox;
+
 
 public class BasisControl implements Initializable{
 	private BasisModel basisModel;
@@ -33,6 +35,9 @@ public class BasisControl implements Initializable{
 	
 	@FXML
 	private TableView tvBestellung;
+	
+	@FXML
+	private ComboBox<Bestellung> cbxBestellung = new ComboBox<Bestellung>();
 	
 	@FXML
 	private Label lblRechnung;
@@ -57,6 +62,7 @@ public class BasisControl implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		BestellungenAufbereiten();
 		gerichteEinlesen();
+		bestellungEinlesen();
 	}
 	
 	 @FXML
@@ -205,8 +211,24 @@ public class BasisControl implements Initializable{
         tvGerichte.getColumns().addAll(colName,colPreis); 
         tvGerichteEdit.getColumns().addAll(colName2,colPreis2);
         
-        tvGerichte.setItems(ausgeleseneGerichte);
-        tvGerichteEdit.setItems(ausgeleseneGerichte2);
+        tvGerichte.setItems(ausgeleseneGerichte.sorted());
+        tvGerichteEdit.setItems(ausgeleseneGerichte2.sorted());
+	}
+	
+	private void bestellungEinlesen() {
+		ObservableList<Bestellung> bestellungen = null;
+		
+		try {
+			bestellungen = basisModel.selectAlleBestellungen();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(bestellungen != null) {
+			cbxBestellung.setItems(bestellungen);
+			cbxBestellung.getSelectionModel().select(1);
+		}
 	}
 	
 	private void BestellungenAufbereiten(){
@@ -269,6 +291,7 @@ public class BasisControl implements Initializable{
 		try {
 			if(bestellung.getBestelltegerichte().size() > 0){
 				basisModel.bestellungSpeichern(bestellung);
+				bestellungEinlesen();
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

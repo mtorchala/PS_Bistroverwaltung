@@ -87,11 +87,14 @@ public class DatenbankAnbindung {
 	}
 	
 	public int insertIntoBestellung(Date datum) throws SQLException{
+		
+		java.sql.Date sqlDate = new java.sql.Date(datum.getTime());
+		
 		String sql = "INSERT INTO bestellung(datum) VALUES(?)";
 		 
         Connection conn = connect();
         PreparedStatement pstmt = conn.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
-        pstmt.setString(1,datum.toString());
+        pstmt.setDate(1, sqlDate);
         pstmt.executeUpdate();
         
         ResultSet rs = pstmt.getGeneratedKeys();
@@ -197,7 +200,9 @@ public class DatenbankAnbindung {
 	    return id;
     }
 	
-	public void selectAlleBestellungen() throws SQLException{
+	public ObservableList<Bestellung> selectAlleBestellungen() throws SQLException{
+		
+		ObservableList<Bestellung> bestellungListe = FXCollections.observableArrayList();
 	       
 		String sql = "SELECT * FROM bestellung";
 		Connection conn = connect();
@@ -205,9 +210,14 @@ public class DatenbankAnbindung {
         ResultSet rs    = stmt.executeQuery(sql);
             
 	    while (rs.next()) {
-	    	System.out.println(rs.getString("datum"));
+	    	//Date newDate = rs.getTimestamp("datum");
+	    	
+	    	java.util.Date utilDate = new java.util.Date(rs.getDate("datum").getTime());
+	    	bestellungListe.add(new Bestellung(rs.getInt("bestellung_id"),
+    				utilDate));
 	    }
 	    conn.close();
+	    return bestellungListe;
     }
 	
 	

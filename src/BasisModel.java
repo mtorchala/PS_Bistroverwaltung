@@ -73,6 +73,12 @@ public class BasisModel {
 		
 	}
 
+	public ObservableList<Bestellung> selectAlleBestellungen() throws SQLException {
+		DatenbankAnbindung dba = new DatenbankAnbindung();
+		return dba.selectAlleBestellungen();
+		
+	}
+	
 	public void bestellungSpeichern(Bestellung bestellung) throws SQLException, InterruptedException {
 		
 		int bestellungid = insertIntoBestellung(bestellung.getDatum());

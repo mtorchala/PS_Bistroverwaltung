@@ -91,7 +91,7 @@ public class BasisControl implements Initializable{
 		 
 			 if(!txtEditName.getText().isEmpty() && !txtEditPreis.getText().isEmpty()) {
 				 try {
-					basisModel.updateGericht(gericht.getGerichtId(), txtEditName.getText(), Double.parseDouble(txtEditPreis.getText().replaceAll(",", ".")), gericht.getKategorieid());
+					basisModel.updateGericht(gericht.getGerichtId(), txtEditName.getText(), stringToDouble(txtEditPreis.getText()), gericht.getKategorieid());
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -119,11 +119,15 @@ public class BasisControl implements Initializable{
 		 }
 	 }
 	 
+	 public double stringToDouble(String s)  throws NumberFormatException {
+		 return Double.parseDouble(s.replaceAll(",", "."));
+	 }
+	 
 	 @FXML
 	 private void insertGericht() {
 		 if(!txtEditName.getText().isEmpty() && !txtEditPreis.getText().isEmpty()) {
 			 try {
-				 basisModel.insertIntoGericht(txtEditName.getText(), Double.parseDouble(txtEditPreis.getText().replaceAll(",", ".")), 1);
+				 basisModel.insertIntoGericht(txtEditName.getText(), stringToDouble(txtEditPreis.getText()), 1);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

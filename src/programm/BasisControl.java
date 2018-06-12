@@ -231,10 +231,12 @@ public class BasisControl implements Initializable{
 			e.printStackTrace();
 		}
 		
+		bestellungen.add(new Bestellung(0,new Date()));
+		
 		if(bestellungen != null) {
 			
 			cbxBestellung.setItems(bestellungen);
-			cbxBestellung.getSelectionModel().select(1);
+			//cbxBestellung.getSelectionModel().select(1);
 		}
 	}
 	
@@ -289,6 +291,13 @@ public class BasisControl implements Initializable{
 	
 	@FXML
 	public void bestellungVerwerfen(){
+		
+		if(bestellung.getBestellungId() > 0) {
+			basisModel.deleteBestellung(bestellung.getBestellungId());
+		}
+
+		//bestellungEinlesen();
+		
 		bestellung = null;
 		bestellung = new Bestellung(new Date());
 		tvBestellung.getColumns().clear();
@@ -327,10 +336,22 @@ public class BasisControl implements Initializable{
 	@FXML
 	public void bestellungLaden(){
 		try {
+			int id = bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex()).getBestellungId();
+			if(id > 0) {
+				ObservableList<BestellungGericht> bestellungGericht = basisModel.bestellungLaden(bestellungen.get(id));
+				bestellung = bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex());
+				bestellung.setBestellteGerichte(bestellungGericht);
+				tvBestellung.setItems(bestellungGericht);
+			} else {
+				bestellung = null;
+				bestellung = new Bestellung(new Date());
+				tvBestellung.getColumns().clear();
+				BestellungenAufbereiten();
 				
-			ObservableList<BestellungGericht> bestellungGericht = basisModel.bestellungLaden(bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex()).getBestellungId());
-			tvBestellung.setItems(bestellungGericht);
+			}
 			tvBestellung.refresh();
+			
+			lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

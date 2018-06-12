@@ -69,6 +69,7 @@ public class BasisControl implements Initializable{
 		BestellungenAufbereiten();
 		gerichteEinlesen();
 		bestellungEinlesen();
+		cbxBestellung.getSelectionModel().select(bestellungen.size()-1);
 	}
 	
 	 @FXML
@@ -231,10 +232,12 @@ public class BasisControl implements Initializable{
 			e.printStackTrace();
 		}
 		
+		bestellungen.add(new Bestellung(0,new Date()));
+		
 		if(bestellungen != null) {
 			
 			cbxBestellung.setItems(bestellungen);
-			cbxBestellung.getSelectionModel().select(1);
+			
 		}
 	}
 	
@@ -289,6 +292,20 @@ public class BasisControl implements Initializable{
 	
 	@FXML
 	public void bestellungVerwerfen(){
+		
+		if(bestellung.getBestellungId() > 0) {
+			try {
+				basisModel.deleteBestellung(bestellung.getBestellungId());
+				bestellungEinlesen();
+				cbxBestellung.getSelectionModel().select(bestellungen.size()-1);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		
+		
 		bestellung = null;
 		bestellung = new Bestellung(new Date());
 		tvBestellung.getColumns().clear();
@@ -314,7 +331,9 @@ public class BasisControl implements Initializable{
 			if(bestellung.getBestelltegerichte().size() > 0){
 				basisModel.bestellungSpeichern(bestellung);
 				bestellungEinlesen();
+				cbxBestellung.getSelectionModel().select(bestellungen.size()-2);
 			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -327,10 +346,26 @@ public class BasisControl implements Initializable{
 	@FXML
 	public void bestellungLaden(){
 		try {
+			Bestellung b = cbxBestellung.getSelectionModel().getSelectedItem();
+			
+			if(b != null){
+				if(b.getBestellungId() > 0) {
+					ObservableList<BestellungGericht> bestellungGericht = basisModel.bestellungLaden(b.getBestellungId());
+					bestellung = bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex());
+					bestellung.setBestellteGerichte(bestellungGericht);
+					tvBestellung.setItems(bestellungGericht);
+				} else {
+				bestellung = null;
+				bestellung = new Bestellung(new Date());
+				tvBestellung.getColumns().clear();
+				BestellungenAufbereiten();
+			}
 				
-			ObservableList<BestellungGericht> bestellungGericht = basisModel.bestellungLaden(bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex()).getBestellungId());
-			tvBestellung.setItems(bestellungGericht);
-			tvBestellung.refresh();
+				
+		}
+		tvBestellung.refresh();
+		
+		lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

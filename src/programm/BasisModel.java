@@ -44,6 +44,12 @@ public class BasisModel {
 		
 	}
 	
+	public void deleteBestellung(int bestellungId) throws SQLException {
+		DatenbankAnbindung dba = new DatenbankAnbindung();
+		dba.deleteBestellung(bestellungId);
+		
+	}
+	
 	public void insertIntoKategorie(String name,int kategorieid) throws SQLException {
 		DatenbankAnbindung dba = new DatenbankAnbindung();
 		dba.insertIntoKategorie(kategorieid,name);

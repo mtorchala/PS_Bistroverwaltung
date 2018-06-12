@@ -87,6 +87,22 @@ public class DatenbankAnbindung {
         conn.close();
 	}
 	
+	public void deleteBestellung(int bestellungId) throws SQLException{
+		String sql = "DELETE FROM gericht_bestellung WHERE bestellung_id = ?";
+		 
+        Connection conn = connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setDouble(1, bestellungId);
+        pstmt.executeUpdate();
+        
+        sql = "DELETE FROM bestellung WHERE bestellung_id = ?";
+        
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setDouble(1, bestellungId);
+        pstmt.executeUpdate();
+        conn.close();
+	}
+	
 	public int insertIntoBestellung(Date datum) throws SQLException{
 		
 		java.sql.Date sqlDate = new java.sql.Date(datum.getTime());

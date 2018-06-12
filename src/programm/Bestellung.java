@@ -11,6 +11,8 @@ public class Bestellung {
 	private ObservableList<BestellungGericht> bestellteGerichte;
 
 	
+	
+
 	public Bestellung(int bestellungId, Date datum) {
 		this.bestellungId = bestellungId;
 		this.datum = datum;
@@ -36,6 +38,10 @@ public class Bestellung {
 
 	public void setDatum(Date datum) {
 		this.datum = datum;
+	}
+	
+	public void setBestellteGerichte(ObservableList<BestellungGericht> bestellteGerichte) {
+		this.bestellteGerichte = bestellteGerichte;
 	}
 
 

@@ -13,8 +13,8 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		BasisModel bm = new BasisModel();
-		BasisControl bc = new BasisControl();
+		//BasisModel bm = new BasisModel();
+		//BasisControl bc = new BasisControl();
 		
 		try {
 			primaryStage.setTitle("Bistro-Verwaltung");

@@ -5,18 +5,26 @@ import javafx.collections.ObservableList;
 
 public class BasisModel {
 	
+	private static BasisModel instance;
+	
 	public BasisModel(){
 		
 		// Initate DB with demo values
 		createAllTables();
 		try {
 			insertIntoKategorie("Hauptgericht", 1);
-			insertIntoGericht("Baguett", 1.50, 1);
 			
 		} catch (SQLException e) {
-			System.out.println("DB already exists.");
+
 			//e.printStackTrace();
 		}
+	}
+	
+	public static BasisModel getInstance(){
+		if(instance == null){
+			instance = new BasisModel();
+		}
+		return instance;
 	}
 
 	public void createAllTables() {

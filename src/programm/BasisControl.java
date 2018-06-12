@@ -59,7 +59,7 @@ public class BasisControl implements Initializable{
 	
 	public BasisControl(){
 		
-		basisModel = new BasisModel();
+		basisModel = BasisModel.getInstance();
 		bestellung = new Bestellung(new Date());
 		
 	}

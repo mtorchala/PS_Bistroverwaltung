@@ -92,9 +92,15 @@ public class BasisControl implements Initializable{
 			 if(!txtEditName.getText().isEmpty() && !txtEditPreis.getText().isEmpty()) {
 				 try {
 					basisModel.updateGericht(gericht.getGerichtId(), txtEditName.getText(), Double.parseDouble(txtEditPreis.getText().replaceAll(",", ".")), gericht.getKategorieid());
-				} catch (NumberFormatException | SQLException e) {
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (NumberFormatException  e) {
+					 Alert alert = new Alert(Alert.AlertType.ERROR);
+					 alert.setTitle("Fehler");
+					 alert.setHeaderText("Preis ist keine Zahl");
+					 alert.setContentText("Für den Preis muss eine gültige Zahl eingegeben werden.");
+					 alert.showAndWait();	
 				}
 				txtEditName.clear();
 				txtEditPreis.clear();
@@ -105,10 +111,10 @@ public class BasisControl implements Initializable{
 				lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
 			 }else {
 				 Alert alert = new Alert(Alert.AlertType.ERROR);
-				    alert.setTitle("Fehler");
-				    alert.setHeaderText("Leerer Name oder Preis");
-				    alert.setContentText("Der Name und der Preis darf nicht leer sein.");
-				    alert.showAndWait();			 
+				 alert.setTitle("Fehler");
+				 alert.setHeaderText("Leerer Name oder Preis");
+				 alert.setContentText("Der Name und der Preis darf nicht leer sein.");
+				 alert.showAndWait();			 
 			 }
 		 }
 	 }
@@ -118,9 +124,15 @@ public class BasisControl implements Initializable{
 		 if(!txtEditName.getText().isEmpty() && !txtEditPreis.getText().isEmpty()) {
 			 try {
 				 basisModel.insertIntoGericht(txtEditName.getText(), Double.parseDouble(txtEditPreis.getText().replaceAll(",", ".")), 1);
-			} catch (NumberFormatException | SQLException e) {
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (NumberFormatException  e) {
+				 Alert alert = new Alert(Alert.AlertType.ERROR);
+				 alert.setTitle("Fehler");
+				 alert.setHeaderText("Preis ist keine Zahl");
+				 alert.setContentText("Für den Preis muss eine gültige Zahl eingegeben werden.");
+				 alert.showAndWait();	
 			}
 			txtEditName.clear();
 			txtEditPreis.clear();

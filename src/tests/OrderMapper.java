@@ -6,7 +6,6 @@ import java.util.List;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.io.LoadFromClasspath;
-import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.junit.JUnitStory;
 import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StoryReporterBuilder;
@@ -30,7 +29,7 @@ public class OrderMapper extends JUnitStory{
 	
 	@Override
 		public List<CandidateSteps> candidateSteps() {
-	return new InstanceStepsFactory(configuration(), new OrderSteps()).createCandidateSteps();
+		return new InstanceStepsFactory(configuration(), new OrderSteps()).createCandidateSteps();
 	}
 
 	

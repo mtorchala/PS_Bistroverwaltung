@@ -69,6 +69,7 @@ public class BasisControl implements Initializable{
 		BestellungenAufbereiten();
 		gerichteEinlesen();
 		bestellungEinlesen();
+		cbxBestellung.getSelectionModel().select(bestellungen.size()-1);
 	}
 	
 	 @FXML
@@ -236,7 +237,7 @@ public class BasisControl implements Initializable{
 		if(bestellungen != null) {
 			
 			cbxBestellung.setItems(bestellungen);
-			//cbxBestellung.getSelectionModel().select(1);
+			
 		}
 	}
 	
@@ -293,10 +294,17 @@ public class BasisControl implements Initializable{
 	public void bestellungVerwerfen(){
 		
 		if(bestellung.getBestellungId() > 0) {
-			basisModel.deleteBestellung(bestellung.getBestellungId());
+			try {
+				basisModel.deleteBestellung(bestellung.getBestellungId());
+				bestellungEinlesen();
+				cbxBestellung.getSelectionModel().select(bestellungen.size()-1);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
-		//bestellungEinlesen();
+		
 		
 		bestellung = null;
 		bestellung = new Bestellung(new Date());
@@ -323,7 +331,9 @@ public class BasisControl implements Initializable{
 			if(bestellung.getBestelltegerichte().size() > 0){
 				basisModel.bestellungSpeichern(bestellung);
 				bestellungEinlesen();
+				cbxBestellung.getSelectionModel().select(bestellungen.size()-2);
 			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -336,22 +346,26 @@ public class BasisControl implements Initializable{
 	@FXML
 	public void bestellungLaden(){
 		try {
-			int id = bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex()).getBestellungId();
-			if(id > 0) {
-				ObservableList<BestellungGericht> bestellungGericht = basisModel.bestellungLaden(bestellungen.get(id));
-				bestellung = bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex());
-				bestellung.setBestellteGerichte(bestellungGericht);
-				tvBestellung.setItems(bestellungGericht);
-			} else {
+			Bestellung b = cbxBestellung.getSelectionModel().getSelectedItem();
+			
+			if(b != null){
+				if(b.getBestellungId() > 0) {
+					ObservableList<BestellungGericht> bestellungGericht = basisModel.bestellungLaden(b.getBestellungId());
+					bestellung = bestellungen.get(cbxBestellung.getSelectionModel().getSelectedIndex());
+					bestellung.setBestellteGerichte(bestellungGericht);
+					tvBestellung.setItems(bestellungGericht);
+				} else {
 				bestellung = null;
 				bestellung = new Bestellung(new Date());
 				tvBestellung.getColumns().clear();
 				BestellungenAufbereiten();
-				
 			}
-			tvBestellung.refresh();
-			
-			lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
+				
+				
+		}
+		tvBestellung.refresh();
+		
+		lblRechnung.setText("Kosten: " + df.format(bestellung.berechnePreis())+ " €");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

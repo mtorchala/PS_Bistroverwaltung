@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programm.BasisControl">
   <tabs>
@@ -34,7 +35,10 @@
                   <Button fx:id="bttnBestellungVerwerfen" layoutX="565.0" layoutY="315.0" mnemonicParsing="false" onAction="#bestellungVerwerfen" prefHeight="27.0" prefWidth="80.0" style="-fx-background-color: red;" text="löschen" />
                   <Label layoutX="29.0" layoutY="24.0" text="Gerichte:" />
       			  <Label layoutX="341.0" layoutY="23.0" text="Bestellung:" />
-     			  <Label fx:id="lblRechnung" layoutX="394.0" layoutY="380.0" style="-fx-background-color: grey;" text="Kosten: 0,00 €" />
+     			  <Label fx:id="lblRechnung" layoutX="394.0" layoutY="380.0" style="-fx-background-color: whitesmoke;" text="Kosten: 0,00 €">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></Label>
                   <Label layoutX="394.0" layoutY="260.0" text="Gericht:" />
                   <Label layoutX="394.0" layoutY="320.0" text="Bestellung:" />
                   <ComboBox fx:id="cbxBestellung" layoutX="418.0" layoutY="18.0" onAction="#bestellungLaden" prefWidth="150.0" />

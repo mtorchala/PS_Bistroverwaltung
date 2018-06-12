@@ -19,11 +19,14 @@ public class OrderSteps extends Steps{
 	
 	ObservableList<Gericht> gerichte;
 	
-	@Given("an order which contains $dishes dishes")
-	public void setDishes(int dishes){
+	@Given("eine Bestellung bestehend aus $anzahlGerichte identischen Gerichten")
+	public void setDishes(int anzahlGerichte){
 		bestellung = new Bestellung(new Date());
 		try {
 			gerichte = new DatenbankAnbindung().selectAlleGerichte();
+			for(int i = 0; i < anzahlGerichte; i++){
+				bestellung.fügeGerichtHinzu(gerichte.get(0));
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,16 +34,14 @@ public class OrderSteps extends Steps{
 
 	}
 	
-	@When("the user adds 1 dish to the order")
-	public void addDish(){
+	@When("der Nutzer 1 identisches Gericht zu der Bestellung hinzufügt")
+	public void addDish(){	
 		bestellung.fügeGerichtHinzu(gerichte.get(0));
-		System.out.println(bestellung.getBestelltegerichte().get(0).getAnzahl());
 	}
 	
-	@Then("the order should contain $dishes dishes")
-	public void checkDish(int dishes){
-		
-		Assert.assertEquals(bestellung.getBestelltegerichte().get(0).getAnzahl(),1);
+	@Then("soll die Bestellung aus $anzahlGerichte identischen Gericht/en bestehen")
+	public void checkDish(int anzahlGerichte){
+		Assert.assertEquals(bestellung.getBestelltegerichte().get(0).getAnzahl(),anzahlGerichte);
 	}
 	
 }

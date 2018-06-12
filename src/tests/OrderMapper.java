@@ -22,7 +22,8 @@ public class OrderMapper extends JUnitStory{
 	@Override
 	public Configuration configuration() {
 		return new MostUsefulConfiguration()
-		.useStoryLoader(new LoadFromClasspath(this.getClass())).useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
+		.useStoryLoader(new LoadFromClasspath(this.getClass()))
+		.useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
 		.withFormats(Format.CONSOLE, Format.TXT, Format.HTML, Format.XML));
 	}
 	
@@ -30,8 +31,5 @@ public class OrderMapper extends JUnitStory{
 		public List<CandidateSteps> candidateSteps() {
 		return new InstanceStepsFactory(configuration(), new OrderSteps()).createCandidateSteps();
 	}
-
-	
-
 }
 

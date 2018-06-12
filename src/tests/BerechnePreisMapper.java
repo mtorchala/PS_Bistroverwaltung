@@ -1,22 +1,23 @@
 package tests;
 
-
+import java.util.Arrays;
 import java.util.List;
 
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.io.LoadFromClasspath;
+import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.junit.JUnitStory;
 import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.CandidateSteps;
 import org.jbehave.core.steps.InstanceStepsFactory;
 
-public class NumberFormatExceptionMapper extends JUnitStory{
+public class BerechnePreisMapper extends JUnitStory{
 	
-	public NumberFormatExceptionMapper(){
+	public BerechnePreisMapper(){
 		super();
-		this.configuredEmbedder().candidateSteps().add(new NumberFormatExceptionSteps());
+		this.configuredEmbedder().candidateSteps().add(new BerechnePreisSteps());
 	}
 	
 	
@@ -28,7 +29,7 @@ public class NumberFormatExceptionMapper extends JUnitStory{
 	}
 	
 	@Override
-		public List<CandidateSteps> candidateSteps() {
-	return new InstanceStepsFactory(configuration(), new NumberFormatExceptionSteps()).createCandidateSteps();
+	public List<CandidateSteps> candidateSteps() {
+		return new InstanceStepsFactory(configuration(), new BerechnePreisSteps()).createCandidateSteps();
 	}
 }

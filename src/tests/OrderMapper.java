@@ -1,6 +1,5 @@
 package tests;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.jbehave.core.configuration.Configuration;

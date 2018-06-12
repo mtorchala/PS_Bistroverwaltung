@@ -12,7 +12,7 @@ public class NumberFormatExceptionSteps extends Steps {
 	
 	String preis;
 	BasisControl basisControl = new BasisControl();
-	private Throwable throwable = null;
+	private boolean thrownException = false;
 	
 	@Given("eine Eingabe für einen Preis $preis")
 	public void setPreis(String preis){
@@ -24,14 +24,14 @@ public class NumberFormatExceptionSteps extends Steps {
 	public void convertPreis(){
 		try {
 			basisControl.stringToDouble(preis);      
-		} catch (NumberFormatException e) {
-		    throwable = e;
+		} catch (Exception e) {
+			
+		    thrownException = true;
 		}	
 	}
 	
 	@Then("soll eine Fehlermeldung aufgerufen werden")
-	public void checkError(){
-		
-		Assert.assertEquals(throwable,NumberFormatException.class);
+	public void checkError(){		
+		Assert.assertEquals(thrownException,true);
 	}
 }

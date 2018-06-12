@@ -9,4 +9,4 @@ Scenario:  Kunde bestellt drei identische Gerichte
  
 Given eine Bestellung bestehend aus 2 identischen Gerichten
 When der Nutzer 1 identisches Gericht zu der Bestellung hinzufügt
-Then soll die Bestellung aus 4 identischen Gericht/en bestehen
+Then soll die Bestellung aus 3 identischen Gericht/en bestehen
